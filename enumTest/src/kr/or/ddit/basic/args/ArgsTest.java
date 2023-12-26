@@ -10,7 +10,6 @@ public class ArgsTest {
 	//매개변수로 받은 정수들의 합계를 구하는 메서드 만들기
 	// (이 정수의 갯수는 상황에 따라 달라질 수 있다.)
 
-	
 	//배열을 이용한 메서드
 	public int sumArr(int[] data) {
 		int sum = 0;
