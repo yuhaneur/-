@@ -10,6 +10,7 @@ public class VectorTest {
 		//객체생성
 		Vector v1 = new Vector();
 		
+		
 		System.out.println("처음 크기  : " + v1.size());
 		
 		//데이터 추가하기 1 : add(추가할 데이터)
