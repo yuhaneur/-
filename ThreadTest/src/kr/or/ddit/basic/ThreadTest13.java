@@ -1,6 +1,7 @@
 package kr.or.ddit.basic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -22,131 +23,232 @@ import java.util.List;
 경기가 끝나면 등수 순으로 출력한다.
 */
 public class ThreadTest13 {
-	
+
 	public static void main(String[] args) {
-		List<Horse> horse = new ArrayList<Horse>();
-		horse.add(new Horse("01번마"));
-		horse.add(new Horse("02번마"));
-		horse.add(new Horse("03번마"));
-		horse.add(new Horse("04번마"));
-		horse.add(new Horse("05번마"));
-		horse.add(new Horse("06번마"));
-		horse.add(new Horse("07번마"));
-		horse.add(new Horse("08번마"));
-		horse.add(new Horse("09번마"));
-		horse.add(new Horse("10번마"));
-		
-		Print print = new Print(horse);
-		for (Horse horse2 : horse) {
-			horse2.start();
+		Horse[] horseArr = new Horse[] { 
+				new Horse("01번말"), new Horse("02번말"), new Horse("03번말"), 
+				new Horse("04번말"),
+				new Horse("05번말"), new Horse("06번말"), new Horse("07번말"), new Horse("08번말"), new Horse("09번말"),
+				new Horse("10번말") };
+
+		GameState gs = new GameState(horseArr);
+
+		for (Horse h : horseArr) {
+			h.start();
 		}
-		print.start();
-		for (Horse horse2 : horse) {
+
+		gs.start();
+
+		for (Horse h : horseArr) {
 			try {
-				horse2.join();
+				h.join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// TODO: handle exception
 			}
 		}
-		
 		try {
-			print.join();
+			gs.join();
 		} catch (InterruptedException e) {
 			// TODO: handle exception
 		}
+		System.out.println();
+		System.err.println("경기 끝...");
+		System.out.println();
+
+		// 등수의 오름차순으로 정렬하기
+		// 배열 정렬하기 ==> Arrays.sort()메서를 사용한다.
+		Arrays.sort(horseArr);
+
+		for (Horse h : horseArr) {
+			System.out.println(h);
+//		List<Horse> horse = new ArrayList<Horse>();
+//		horse.add(new Horse("01번마"));
+//		horse.add(new Horse("02번마"));
+//		horse.add(new Horse("03번마"));
+//		horse.add(new Horse("04번마"));
+//		horse.add(new Horse("05번마"));
+//		horse.add(new Horse("06번마"));
+//		horse.add(new Horse("07번마"));
+//		horse.add(new Horse("08번마"));
+//		horse.add(new Horse("09번마"));
+//		horse.add(new Horse("10번마"));
+
+//		Print print = new Print(horse);
+//		for (Horse horse2 : horse) {
+//			horse2.start();
+//		}
+//		print.start();
+//		for (Horse horse2 : horse) {
+//			try {
+//				horse2.join();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//			}
+//		}
+//		
+//		try {
+//			print.join();
+//		} catch (InterruptedException e) {
+//			// TODO: handle exception
+//		}
+
+		}
+	}
+}
+	class Horse extends Thread implements Comparable<Horse> {
+		public static int currentRank = 0; // 말의 현재 등수를 구하는 변수
+
+		private String hname;
+		private int location;
+		private int rank;
+
+		// 생성자
+		public Horse(String name) {
+			this.hname = name;
+		}
+
+		
+		
+		public String gethName() {
+			return hname;
+		}
+
+
+
+		public void sethName(String name) {
+			this.hname = name;
+		}
+
+
+
+		public int getLocation() {
+			return location;
+		}
+
+		public void setLocation(int location) {
+			this.location = location;
+		}
+
+		public int getRank() {
+			return rank;
+		}
+
+		public void setRank(int rank) {
+			this.rank = rank;
+		}
+
+		@Override
+		public void run() {
+			for (int i = 1; i <= 50; i++) {
+				location = i; // 말의 현재위치 저장하기
+
+				try {
+					Thread.sleep((int) (Math.random() * 500));
+				} catch (InterruptedException e) {
+					// TODO: handle exception
+				}
+			}
+
+			currentRank++;
+			rank = currentRank;
+
+//		List<String> list = new ArrayList<String>();
+//		for(int i=1;i<=50;i++) {
+//			list.add("-");
+//		}
+//		for(int i=0;i<50;i++) {
+//			try {
+//				Thread.sleep((int)(Math.random()*200));
+//			} catch (InterruptedException e) {
+//				// TODO: handle exception
+//			}
+//			list.set(i, ">");
+//			if(i>0) {
+//				list.set(i-1, "-");				
+//			}
+//			
+//			location = list.indexOf(">");
+//		}
+		}
+
+		@Override
+		public int compareTo(Horse o) {
+			return Integer.compare(this.rank, o.getRank());
+		}
+
+		@Override
+		public String toString() {
+			return "경주마" + hname + "은" + rank + "등 입니다.";
+		}
 		
 	}
-}
 
-class Horse extends Thread implements Comparable<Horse>{
-	private String name;
-	private int location;
-	private int rank;
-	
-	// 생성자
-	public Horse(String name) {
-		this.name= name;
-	}	
+// 경기 중간 중간에 각 말들의 위치
+	class GameState extends Thread {
+		private Horse[] horseArr; // 경주에 참가하는 말들이 저장될 배열
 
-	public int getLocation() {
-		return location;
-	}
-
-	public void setLocation(int location) {
-		this.location = location;
-	}
-
-	public int getRank() {
-		return rank;
-	}
-
-	public void setRank(int rank) {
-		this.rank = rank;
-	}
-	
-	
-	@Override
-	public void run() {
-		List<String> list = new ArrayList<String>();
-		for(int i=1;i<=50;i++) {
-			list.add("-");
+		public GameState(Horse[] horseArr) {
+			this.horseArr = horseArr;
 		}
-		for(int i=0;i<50;i++) {
-			try {
-				Thread.sleep((int)(Math.random()*200));
-			} catch (InterruptedException e) {
-				// TODO: handle exception
-			}
-			list.set(i, ">");
-			if(i>0) {
-				list.set(i-1, "-");				
-			}
-			
-			location = list.indexOf(">");
-		}
-	}
-	
-	@Override
-	public int compareTo(Horse o) {
-		if(this.getRank()> o.getRank()) {
-			return 1;
-		}else {
-			return -1;
-		}
-	}
-	
-}
 
-class Print extends Thread{
-	List<Horse> list;
-	
-	public Print(List<Horse> list) {
-		this.list=list;
-	}
-	@Override
-	public void run() {
-		while(true) {
-			try {
-				Thread.sleep((int)(Math.random()*1000));
-			} catch (InterruptedException e) {
-				// TODO: handle exception
-			}
-			for(int i=0;i<list.size();i++) {
-				System.out.print(list.get(i).getName() + " : ");
-				int position = list.get(i).getLocation();
-				for(int j=0;j<position;j++) {
-					System.out.print("-");
-				}			
-				System.out.print(">");
-				for(int k=position;k<49;k++) {
-					System.out.print("-");
+		@Override
+		public void run() {
+			while (true) {
+
+				// 모든 말들의 경주가 끝났는지 여부 검사 (말 하나가 들어올떄마다 랭크가 1씩늘어나기떄문)
+				if (Horse.currentRank == horseArr.length) {
+					break;
 				}
-				System.out.println();
+
+				// 배열 개수만큼 반복
+				for (int i = 0; i < horseArr.length; i++) {
+					System.out.print(horseArr[i].gethName() + " : ");
+					for (int j = 1; j <= 50; j++) {
+						if (j == horseArr[i].getLocation()) {
+							System.out.print(">");
+						} else {
+							System.out.print("-");
+						}
+					}
+					System.out.println();
+				}
+
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO: handle exception
+				}
 			}
-			
 		}
 	}
-}
 
-
-
+//class Print extends Thread{
+//	List<Horse> list;
+//	
+//	public Print(List<Horse> list) {
+//		this.list=list;
+//	}
+//	@Override
+//	public void run() {
+//		while(true) {
+//			try {
+//				Thread.sleep((int)(Math.random()*1000));
+//			} catch (InterruptedException e) {
+//				// TODO: handle exception
+//			}
+//			for(int i=0;i<list.size();i++) {
+//				System.out.print(list.get(i).getName() + " : ");
+//				int position = list.get(i).getLocation();
+//				for(int j=0;j<position;j++) {
+//					System.out.print("-");
+//				}			
+//				System.out.print(">");
+//				for(int k=position;k<49;k++) {
+//					System.out.print("-");
+//				}
+//				System.out.println();
+//			}
+//			
+//		}
+//	}
+//}
