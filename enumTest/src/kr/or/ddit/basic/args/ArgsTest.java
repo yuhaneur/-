@@ -53,6 +53,7 @@ public class ArgsTest {
 		
 		int[] numArr = {100,200,300};
 		//이건 안됨, 저 아래에있는것 처럼 해야함
+		
 //		int[] numArr = null;
 //		numArr = {100,200,300};
 		
