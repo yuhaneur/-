@@ -22,6 +22,6 @@ public class URLTest01 {
 		System.out.println("Query : " + url.getQuery());
 		System.out.println();
 		System.out.println(url.toExternalForm());
-				
+		
 	}
 }
