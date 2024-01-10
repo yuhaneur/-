@@ -12,7 +12,7 @@ public class URLTest01 {
 		// 프로토콜 :// 호스트명:포트번호/경로명/파일명? 쿼리스트링#참조
 		
 //		URL url = new URL("http://ddit.or.kr:80/index.html?test=123");
-		URL url = new URL("http","ddit.or.kr",80,"/index.html?test=123", null);
+		URL url = new URL("http","ddit.or.kr",80,"/index.html?test=123");
 		
 		System.out.println("Protocol : " + url.getProtocol());
 		System.out.println("Host : " + url.getHost());
