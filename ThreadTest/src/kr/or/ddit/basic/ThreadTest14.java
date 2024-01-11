@@ -25,6 +25,7 @@ public class ThreadTest14 {
 		cth.start();
 		
 		pth.start();
+		
 	}
 }
 
