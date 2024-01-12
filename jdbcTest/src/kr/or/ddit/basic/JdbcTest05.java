@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
+import kr.or.ddit.util.DBUtil;
+
 /*
   Lprod 테이블에 새로운 데이터 추가 하기
   
@@ -26,25 +28,24 @@ public class JdbcTest05 {
 		
 		
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			
+//			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "YHN", "java");
 			
-			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "YHN", "java");
+			conn = DBUtil.getConnection();
 			
 			String chk = "";
 			String gu="";
 			String nm ="";
+
+			// gu 중복확인 쿼리
+			chk = "select count(*) from lprod where lprod_gu=?";
+			pstmt = conn.prepareStatement(chk);
 			boolean c = true;
-			while(c) {
-					
+			while(c) {					
 				System.out.print("Lprod_gu 입력 >> ");
 				gu = sc.next();
 				
-				System.out.print("Lprod_nm 입력 >> ");
-				nm = sc.next();
-				
-				// gu 중복확인 쿼리
-				chk = "select count(*) from lprod where lprod_gu=?";
-				pstmt = conn.prepareStatement(chk);
 				pstmt.setString(1, gu);
 				rs = pstmt.executeQuery();
 				
@@ -55,7 +56,8 @@ public class JdbcTest05 {
 					c= false;
 				}
 			}
-			
+			System.out.print("Lprod_nm 입력 >> ");
+			nm = sc.next();
 			// 정보 저장 쿼리
 			String insert = "insert into lprod(LPROD_ID,LPROD_GU,LPROD_NM) "
 					+ " values ((select max(lprod_id) from lprod)+1,?,?)";
@@ -72,8 +74,8 @@ public class JdbcTest05 {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
 		} finally {
 			if(conn!=null) try {conn.close();}catch(SQLException e) {};
 			if(pstmt!=null) try {pstmt.close();}catch(SQLException e) {};

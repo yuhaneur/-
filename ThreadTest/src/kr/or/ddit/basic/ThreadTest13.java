@@ -61,37 +61,6 @@ public class ThreadTest13 {
 
 		for (Horse h : horseArr) {
 			System.out.println(h);
-//		List<Horse> horse = new ArrayList<Horse>();
-//		horse.add(new Horse("01번마"));
-//		horse.add(new Horse("02번마"));
-//		horse.add(new Horse("03번마"));
-//		horse.add(new Horse("04번마"));
-//		horse.add(new Horse("05번마"));
-//		horse.add(new Horse("06번마"));
-//		horse.add(new Horse("07번마"));
-//		horse.add(new Horse("08번마"));
-//		horse.add(new Horse("09번마"));
-//		horse.add(new Horse("10번마"));
-
-//		Print print = new Print(horse);
-//		for (Horse horse2 : horse) {
-//			horse2.start();
-//		}
-//		print.start();
-//		for (Horse horse2 : horse) {
-//			try {
-//				horse2.join();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//			}
-//		}
-//		
-//		try {
-//			print.join();
-//		} catch (InterruptedException e) {
-//			// TODO: handle exception
-//		}
-
 		}
 	}
 }
@@ -152,23 +121,6 @@ public class ThreadTest13 {
 			currentRank++;
 			rank = currentRank;
 
-//		List<String> list = new ArrayList<String>();
-//		for(int i=1;i<=50;i++) {
-//			list.add("-");
-//		}
-//		for(int i=0;i<50;i++) {
-//			try {
-//				Thread.sleep((int)(Math.random()*200));
-//			} catch (InterruptedException e) {
-//				// TODO: handle exception
-//			}
-//			list.set(i, ">");
-//			if(i>0) {
-//				list.set(i-1, "-");				
-//			}
-//			
-//			location = list.indexOf(">");
-//		}
 		}
 
 		@Override
@@ -221,34 +173,3 @@ public class ThreadTest13 {
 			}
 		}
 	}
-
-//class Print extends Thread{
-//	List<Horse> list;
-//	
-//	public Print(List<Horse> list) {
-//		this.list=list;
-//	}
-//	@Override
-//	public void run() {
-//		while(true) {
-//			try {
-//				Thread.sleep((int)(Math.random()*1000));
-//			} catch (InterruptedException e) {
-//				// TODO: handle exception
-//			}
-//			for(int i=0;i<list.size();i++) {
-//				System.out.print(list.get(i).getName() + " : ");
-//				int position = list.get(i).getLocation();
-//				for(int j=0;j<position;j++) {
-//					System.out.print("-");
-//				}			
-//				System.out.print(">");
-//				for(int k=position;k<49;k++) {
-//					System.out.print("-");
-//				}
-//				System.out.println();
-//			}
-//			
-//		}
-//	}
-//}

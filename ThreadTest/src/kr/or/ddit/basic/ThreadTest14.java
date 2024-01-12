@@ -52,7 +52,7 @@ class CalcPIThread extends Thread{
 		 	
 		 */
 		double sum = 0.0;
-		for(long i=1 ; i<=10000000000000L; i+=2) {
+		for(long i=1 ; i<=100000000L; i+=2) {
 			if((i/2)%2==0) {	// 2로 나눈 몫이 짝수일 때 
 				sum += 1.0 / i;
 			}else {	
@@ -78,6 +78,7 @@ class PrintPIThread extends Thread{
 		while(true) {
 			// 계산이 완료되었는지 여부를 검사한다.
 			if(sd.isOk==true) {
+				
 				break;
 			}else {
 				Thread.yield();

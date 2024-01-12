@@ -45,7 +45,7 @@ public class ThreadTest16 {
 			
 			@Override
 			public void run() {
-				boolean result = acount.withdraw(6000); // 6000원 출금하기
+				boolean result = acount.withdraw(5000); // 6000원 출금하기
 				System.out.println("쓰레드에서 result = " + result + ", balance = "
 						+ acount.getBalance());
 			}

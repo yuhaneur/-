@@ -37,9 +37,9 @@ class ShareObject{
 	private int sum = 0;
 	
 	// 동기화 처리하기
-//	public synchronized void add() { // 방법1 => 메서드에 동기화 설정하기
-	public void add() { 
-		synchronized (this) { // 방법 2 => 동기화 블럭으로 동기화 설정하기
+	public synchronized void add() { // 방법1 => 메서드에 동기화 설정하기
+//	public void add() { 
+//		synchronized (this) { // 방법 2 => 동기화 블럭으로 동기화 설정하기
 			
 			int n = sum;
 			
@@ -48,7 +48,7 @@ class ShareObject{
 			sum = n;
 			
 			System.out.println(Thread.currentThread().getName() + "합계 : " + sum);
-		}
+		
 	}
 }
 

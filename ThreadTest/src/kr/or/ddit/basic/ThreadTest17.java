@@ -2,6 +2,7 @@ package kr.or.ddit.basic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -21,7 +22,6 @@ import java.util.Vector;
 */
 public class ThreadTest17 {
 	public static Vector<Integer> vec = new Vector<Integer>();
-	
 	//동기화 처리가 되지 않은 List
 	public static List<Integer> list1 = new ArrayList<Integer>();
 	
@@ -36,8 +36,8 @@ public class ThreadTest17 {
 			@Override
 			public void run() {
 				for(int i=0; i<10000;i++) {
-//					vec.add(i);
-//					list1.add(i);
+					vec.add(i);
+					list1.add(i);
 					list2.add(i);
 				}
 			}
@@ -60,8 +60,8 @@ public class ThreadTest17 {
 			}
 		}
 		
-//		System.out.println("vec의 개수 : " + vec.size());
-//		System.out.println("list1의 개수 : " + list1.size());
+		System.out.println("vec의 개수 : " + vec.size());
+		System.out.println("list1의 개수 : " + list1.size());
 		System.out.println("list2의 개수 : " + list2.size());
 		
 	}
