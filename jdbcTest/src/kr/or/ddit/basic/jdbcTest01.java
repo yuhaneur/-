@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 /*
 	JDBC(Java DataBase Connectivity) ==> java에서 DB자료를 처리하는 라이브러리
@@ -82,7 +83,22 @@ public class jdbcTest01 {
 			if(stmt!=null) try {stmt.close();} catch(SQLException e) {};
 			if(conn!= null) try {conn.close();} catch(SQLException e) {};
 		}
-
+		Scanner sc = new Scanner(System.in);
+		System.out.println("넥스트 입력");
+		String a = sc.next();
+		
+		System.out.println("넥스트 입력");
+		String b = sc.next();
+		
+		System.out.println("넥스트 라인 입력");
+		String c = sc.nextLine();
+		System.out.println("넥스트 라인 입력");
+		String d = sc.nextLine();
+		
+		System.out.println(a);
+		System.out.println(b);
+		System.out.println(c);
+		System.out.println(d);
 	}
 
 }

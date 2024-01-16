@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 import kr.or.ddit.util.DBUtil;
+import kr.or.ddit.util.DBUtil2;
+import kr.or.ddit.util.DBUtil3;
 
 /*
 	회원을 관리하는 프로그램을 작성하시오. (MYMEMBER테이블 이용)
@@ -28,9 +30,6 @@ import kr.or.ddit.util.DBUtil;
 */
 public class JDBCTest07 {
 	Scanner sc = new Scanner(System.in);
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
 
 //	 JDBCTest07 (){
 //		 
@@ -42,8 +41,8 @@ public class JDBCTest07 {
 	}
 
 	public void start() {
+		Connection conn = null;
 		conn = DBUtil.getConnection();
-
 		while (true) {
 			int num = display();
 
@@ -60,6 +59,9 @@ public class JDBCTest07 {
 			case 4:
 				infoMember();
 				break;
+			case 5:
+				detailUpdate();
+				break;
 			case 0:
 				System.out.println("프로그램 종료...");
 				return;
@@ -70,12 +72,87 @@ public class JDBCTest07 {
 		}
 	}
 
+	private void detailUpdate() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		conn = DBUtil.getConnection();
+
+		System.out.println("==회원정보 원하는거 수정하기==");
+		System.out.print("수정할 ID>>");
+		String id = sc.next();
+		
+			String updateField = null;	// 수정할 컬럼명이 저장될 변수
+			String updateTitle = null;	// 수정할 내용의 제목이 저장될 변수
+			int num ;
+			do {
+				System.out.println("1.비밀번호 수정");
+				System.out.println("2.이름 수정");
+				System.out.println("3.전화번호 수정");
+				System.out.println("4.주소 수정");
+				System.out.print("메뉴선택 >>");
+				num = sc.nextInt();
+				
+				switch(num) {
+					case 1 : updateField = "mem_pass";
+							 updateTitle = "비밀번호";
+						break;
+					case 2 :updateField = "MEM_NAME";
+							updateTitle = "회원이름";
+						break;
+					case 3 : updateField = "MEM_TEL";
+							 updateTitle = "전화번호";
+						break;
+					case 4 :updateField = "MEM_ADDR";
+							updateTitle = "회원주소";
+						break;
+					
+					default : 
+						System.out.println("수정항목을 잘못 선택했습니다. 다시 선택하세요...");
+				}
+			}while(num < 1 || num > 4);
+			
+			sc.nextLine(); 
+			System.out.println();
+			System.out.print("새로운 " + updateTitle + " >> ");
+			String updateDate = sc.nextLine();
+			
+			
+			try {
+				conn = DBUtil.getConnection();
+				
+				String sql = "update mymember set " + updateField + " = ? where mem_id = ?";
+				pstmt =conn.prepareStatement(sql);
+				pstmt.setString(1, updateDate);
+				pstmt.setString(2, id);
+				
+				int cnt = pstmt.executeUpdate();
+				
+				if(cnt > 0) {
+					System.out.println("수정 작업 성공!!!");
+				}else {
+					System.out.println("수정 작업 실패~~~");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				if (pstmt != null) try {pstmt.close();} catch (SQLException e) {};
+				if (conn != null) try {conn.close();} catch (SQLException e) {};
+			}
+		
+
+	}
+
 	private void infoMember() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+//		conn = DBUtil.getConnection();
+//		conn = DBUtil2.getConnection();
+		conn = DBUtil3.getConnection();
 		System.out.println("==회원정보 전체보기==");
 
-		String sql = "select MEM_ID,MEM_PASS,MEM_NAME,MEM_TEL,MEM_ADDR"
-				+ " from mymember "
-				+ "order by 1";
+		String sql = "select MEM_ID,MEM_PASS,MEM_NAME,MEM_TEL,MEM_ADDR" + " from mymember " + "order by 1";
 
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -96,33 +173,55 @@ public class JDBCTest07 {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (rs != null)
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			;
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			;
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			;
 		}
 
 	}
 
 	private void update() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		conn = DBUtil.getConnection();
 		System.out.println("==회원정보 수정==");
 
 		System.out.print("변경하고싶은 ID >>");
 		String updateId = sc.next();
-		
 
 		String chk = "select count(*) from mymember where mem_id = ?";
-		
+
 		String sql = "update MYMEMBER SET " + " MEM_NAME=?,MEM_TEL=?,MEM_ADDR=? where MEM_ID=?";
 		try {
-			
+
 			// 아이디 존재여부
 			pstmt = conn.prepareStatement(chk);
 			pstmt.setString(1, updateId);
-			rs= pstmt.executeQuery();
-			
+			rs = pstmt.executeQuery();
+
 			rs.next();
-			if(rs.getInt(1)==0) {
+			if (rs.getInt(1) == 0) {
 				System.out.println("아이디가 존재하지 않습니다.");
 				return;
 			}
-			
+
 			System.out.print("변경할 이름>>");
 			String updateName = sc.next();
 			System.out.print("변경할 전화번호>>");
@@ -130,8 +229,7 @@ public class JDBCTest07 {
 			sc.nextLine();
 			System.out.print("변경할 주소>>");
 			String updateAddr = sc.nextLine();
-			
-			
+
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, updateName);
@@ -145,33 +243,56 @@ public class JDBCTest07 {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (rs != null)
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			;
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			;
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			;
 		}
 
 	}
 
 	private void delete() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		conn = DBUtil.getConnection();
 		System.out.println("==회원정보 삭제==");
 		System.out.print("삭제할 ID >> ");
 		String deleteId = sc.next();
-		
+
 		String chk = "select count(*) from mymember where mem_id = ?";
-		
+
 		String sql = "delete from mymember where mem_id= ? ";
 
 		try {
-			
+
 			// 아이디 존재여부
 			pstmt = conn.prepareStatement(chk);
 			pstmt.setString(1, deleteId);
-			rs=pstmt.executeQuery();
-			
+			rs = pstmt.executeQuery();
+
 			rs.next();
-			if(rs.getInt(1)==0) {
+			if (rs.getInt(1) == 0) {
 				System.out.println("아이디가 존재하지 않습니다.");
 				return;
 			}
-			
-			
+
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, deleteId);
@@ -181,6 +302,25 @@ public class JDBCTest07 {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (rs != null)
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			;
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			;
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			;
 		}
 	}
 
@@ -190,6 +330,7 @@ public class JDBCTest07 {
 		System.out.println(" 2. 자료 삭제		");
 		System.out.println(" 3. 자료 수정		");
 		System.out.println(" 4. 전체 자료 출력	");
+		System.out.println(" 5. 자료 수정2		"); // ==> 원하는 항목만 수정하기
 		System.out.println(" 0. 작업 끝.");
 		int select = sc.nextInt();
 		sc.nextLine();
@@ -197,6 +338,11 @@ public class JDBCTest07 {
 	}
 
 	public void insert() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		conn = DBUtil.getConnection();
 		System.out.println("==회원정보 등록==");
 
 		boolean idChk = true;
@@ -251,6 +397,25 @@ public class JDBCTest07 {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (rs != null)
+				try {
+					rs.close();
+				} catch (SQLException e) {
+				}
+			;
+			if (pstmt != null)
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+				}
+			;
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (SQLException e) {
+				}
+			;
 		}
 
 	}
