@@ -3,6 +3,7 @@ package kr.or.ddit.mvc.controller;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,7 +18,7 @@ public class MemberController {
 	
 	public MemberController() {
 		sc = new Scanner(System.in);
-		service = new MemberServiceImpl();
+		service = MemberServiceImpl.getInstance();
 	}
 	
 	
@@ -44,7 +45,7 @@ public class MemberController {
 				infoMember();
 				break;
 			case 5:
-//				detailUpdate();
+				detailUpdate();
 				break;
 			case 0:
 				System.out.println("프로그램 종료...");
@@ -57,6 +58,64 @@ public class MemberController {
 	}
 	
 	
+	private void detailUpdate() {
+
+		System.out.println("==회원정보 원하는거 수정하기==");
+		System.out.print("수정할 ID>>");
+		String id = sc.next();
+		
+			String updateField = null;	// 수정할 컬럼명이 저장될 변수
+			String updateTitle = null;	// 수정할 내용의 제목이 저장될 변수
+			int num ;
+			do {
+				System.out.println("1.비밀번호 수정");
+				System.out.println("2.이름 수정");
+				System.out.println("3.전화번호 수정");
+				System.out.println("4.주소 수정");
+				System.out.print("메뉴선택 >>");
+				num = sc.nextInt();
+				
+				switch(num) {
+					case 1 : updateField = "mem_pass";
+							 updateTitle = "비밀번호";
+						break;
+					case 2 :updateField = "MEM_NAME";
+							updateTitle = "회원이름";
+						break;
+					case 3 : updateField = "MEM_TEL";
+							 updateTitle = "전화번호";
+						break;
+					case 4 :updateField = "MEM_ADDR";
+							updateTitle = "회원주소";
+						break;
+					
+					default : 
+						System.out.println("수정항목을 잘못 선택했습니다. 다시 선택하세요...");
+				}
+				
+			}while(num < 1 || num > 4);
+			
+			HashMap<String, String> memMap = new HashMap<String, String>();
+			
+			sc.nextLine(); 
+			System.out.println();
+			System.out.print("새로운 " + updateTitle + " >> ");
+			String updateDate = sc.nextLine();
+			memMap.put("field", updateField);
+			memMap.put("data", updateDate);
+			memMap.put("id", id);
+			
+			int cnt = service.updateMember2(memMap);
+			
+			if(cnt > 0) {
+				System.out.println("수정 작업 성공!!!");
+			}else {
+				System.out.println("수정 작업 실패~~~");
+			}
+		
+	}
+
+
 	private void infoMember() {
 		System.out.println("==회원정보 전체보기==");
 		System.out.println("아이디\t 비밀번호\t 이름\t    전화번호\t\t    주소\t");
@@ -125,7 +184,7 @@ public class MemberController {
 		
 		int count ;
 		count = service.deleteMember(deleteId);
-		if(count ==1) {
+		if(count >0) {
 			System.out.println("삭제 성공!!!");				
 		}else {
 			System.out.println("삭제 실패~~~");

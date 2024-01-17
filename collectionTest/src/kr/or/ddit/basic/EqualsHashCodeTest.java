@@ -34,7 +34,6 @@ public class EqualsHashCodeTest {
 		System.out.println("p1=> " + p1.hashCode());
 		System.out.println("p2=> " + p2.hashCode());
 		System.out.println("p3=> " + p3.hashCode());
-		
 	}
 }
 

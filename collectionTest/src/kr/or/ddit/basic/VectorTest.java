@@ -1,5 +1,7 @@
 package kr.or.ddit.basic;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class VectorTest {
@@ -142,6 +144,9 @@ public class VectorTest {
 		 //		==> Vector의 데이터 중에서 'Collection객체'가 가지고 있는 모든 데이터를 삭제한다.
 		 // 	==> 반환값 : 성공(true), 실패(false)
 		 
+//		 List<Object> list =new ArrayList<Object>();
+//		 list.add("BBB");
+//		 list.add("AAA");
 		 v3.removeAll(v4);
 		 System.out.println("v3 => "+ v3);
 		 System.out.println();

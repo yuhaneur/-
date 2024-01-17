@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kr.or.ddit.mvc.vo.MemberVO;
@@ -12,6 +13,16 @@ import kr.or.ddit.util.DBUtil3;
 
 public class MemberDaoImpl implements IMemberDao{
 
+	private static MemberDaoImpl dao;
+	
+	private MemberDaoImpl() {}
+	
+	public static MemberDaoImpl getInstance() {
+		if(dao ==null) dao = new MemberDaoImpl();
+		
+		return dao;
+	}
+	
 	@Override
 	public int insertMember(MemberVO memVo) {
 		int cnt = 0;	// 반환값이 저장될 변수
@@ -142,6 +153,28 @@ public class MemberDaoImpl implements IMemberDao{
 			if(conn!=null)try {conn.close();}catch(SQLException e ) {}
 			if(pstmt!=null)try {pstmt.close();}catch(SQLException e ) {}
 			if(rs!=null)try {rs.close();}catch(SQLException e ) {}
+		}
+		return cnt;
+	}
+
+	@Override
+	public int updateMember2(HashMap<String, String> updateData) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		int cnt =0;
+		try {
+			String sql = "update mymember set " + updateData.get("field") + " = ? where mem_id = ?";
+			conn=DBUtil3.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, updateData.get("data"));
+			pstmt.setString(2, updateData.get("id"));
+			cnt = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(conn!=null)try {conn.close();}catch(SQLException e ) {}
+			if(pstmt!=null)try {pstmt.close();}catch(SQLException e ) {}
 		}
 		return cnt;
 	}
