@@ -183,7 +183,7 @@ class SortByTotal implements Comparator<Student1>{
 			return std1.getName().compareTo(std2.getName());
 			
 		}
-		return 0;
+		return (std1.getTot()-std2.getTot())*-1;
 	}
 	
 }
