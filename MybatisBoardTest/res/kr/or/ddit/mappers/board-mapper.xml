@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		   
+<mapper namespace="board">
+	<insert parameterType="BoardVO1" id="insertBoard">
+		insert into jdbc_board(
+					board_no,board_title,board_writer,board_date,board_cnt,board_content)
+					values(board_seq.nextval, #{board_title}, #{board_writer} , sysdate ,0 , #{board_content})
+	</insert>
+	
+	<update parameterType="BoardVO1" id="updateBoard">
+		update jdbc_board set 
+					 board_title= #{board_title} , board_date = sysdate , board_content = #{board_content}
+					 where board_no = #{board_no}
+	</update>
+	
+	<delete parameterType="int" id="deleteBoard">
+		delete from jdbc_board where board_no = #{board_no}
+	</delete>
+	
+	<select resultType="BoardVO1" id="selectAll">
+		select * from jdbc_board 
+			 order by board_no desc
+	</select>
+	
+	<select resultType="BoardVO1" parameterType="int" id="selectOne">
+		select * from jdbc_board 
+			 where board_no = #{board_no}
+	</select>
+	
+	<select parameterType="String" resultType="BoardVO1" id="searchList">
+		select * from jdbc_board 
+		                where board_title like '%' || #{board_title} || '%'
+		                order by board_no desc 
+	</select>
+	<!-- CONCAT('%', #{board_title}, '%') -->
+	<update parameterType="int" id="updateBoardCount">
+		update jdbc_board set 
+					board_cnt = board_cnt + 1 
+					 where board_no = #{board_no}
+	</update>
+</mapper>
