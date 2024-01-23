@@ -28,6 +28,10 @@ public class MemberController {
 	
 	// 시작 메서드
 	public void startMember() {
+		System.out.println();
+		System.out.println("=========================");
+		System.out.println("   MyBatis용 회원관리 프로그램");
+		System.out.println("=========================");
 		while (true) {
 			int num = display();
 

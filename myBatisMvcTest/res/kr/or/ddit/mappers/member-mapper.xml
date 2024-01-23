@@ -18,6 +18,8 @@
 		where MEM_ID=#{mem_id}
 	</update>
 	
+	<!-- 맵을 통할떄 ${변수명} , ${컬럼명} , ${key값]이렇게씀  -->
+	
 	<update parameterType="map" id="updateMember2">
 		update mymember set ${field} = #{data} where mem_id = #{id}
 	</update>

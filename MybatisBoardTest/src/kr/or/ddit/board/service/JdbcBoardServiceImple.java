@@ -28,7 +28,6 @@ public class JdbcBoardServiceImple implements IJdbcBoardService {
 
 	@Override
 	public int updateBoard(BoardVO1 boardVo) {
-		dao.insertBoard(boardVo);
 		return dao.updateBoard(boardVo);
 	}
 
