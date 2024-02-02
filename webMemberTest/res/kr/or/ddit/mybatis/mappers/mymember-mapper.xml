@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 이 문서는 MyBatis에서 처리할 SQL문을 작성하는 문서입니다. -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		   
+<!-- 
+     mapper태그의 namespace속성값은 이 곳에 작성된 SQL문을 호출해서 사용할 때
+           사용되는 이름이다.
+-->
+<mapper namespace="member">
+	<!-- 회원 전체 리스트 -->
+	<select id="selectMemberList" resultType="memVO">
+		select * from mymember
+	</select>
+	
+	<!-- 회원 한명 정보 -->
+	<select id="selectMember" parameterType="String" resultType="memVO">
+		select * from mymember where mem_id=#{mem_id}
+	</select>
+	
+	<!-- 회원정보 등록 -->
+	<insert id="insertMember" parameterType="memVO">
+		insert into mymember
+		(#{mem_id},#{mem_pass},#{mem_name},#{mem_tel},#{mem_addr},#{mem_photo})
+	</insert>
+	
+	<!-- 회원정보 수정 -->
+	<update id="updateMember" parameterType="memVO">
+		update mymember set mem_pass=#{mem_pass}, mem_name = #{mem_name},
+		mem_tel=#{mem_tel}, mem_addr=#{mem_addr}, mem_photo=#{mem_photo}
+		where mem_id=#{mem_id}
+	</update>
+	<!-- 회원정보 삭제 -->
+	<delete id="deleteMember" parameterType="String">
+		delete mymember where mem_id=#{mem_id}
+	</delete>
+	
+	<!-- id중복체크 -->
+	<select id="checkId" parameterType="String">
+		select count(mem_id) from mymember where mem_id=#{mem_id}
+	</select>
+</mapper>

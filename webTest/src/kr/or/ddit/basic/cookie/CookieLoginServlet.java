@@ -18,29 +18,22 @@ public class CookieLoginServlet extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
-		
+
 		String vid = request.getParameter("id");
 		String vpass =request.getParameter("pass");
 		String chk = request.getParameter("chkBox");
-		System.out.println(vid);
-		System.out.println(vpass);
-		System.out.println(chk);
-		
 		Cookie id = new Cookie("id",vid);
-		Cookie pass = new Cookie("pass",vpass);
-		Cookie chkBox = new Cookie("pass",chk);
-		response.addCookie(id);
-		response.addCookie(pass);
-		if(chk.equals("on")) {	
-			Cookie[] cookieArr = request.getCookies();
-			for(Cookie cookie : cookieArr) {
-				if("id".equals(id.getName())) {
-					request.setAttribute("idVal", id.getValue()); 
-					request.setAttribute("chkVal", chkBox.getValue()); 
-				}
-			}
-		}else {
+		System.out.println(chk);
+		if(chk==null) {	
 			id.setMaxAge(0);
+		}
+		response.addCookie(id);
+		// 로그인 성공 여부 확인
+		if("test".equals(vid) && "1234".equals(vpass)) {
+			// 로그인 성공
+			response.sendRedirect(request.getContextPath() + "/basic/cookie/cookieMain.jsp");
+		}else {
+			response.sendRedirect(request.getContextPath() + "/basic/cookie/cookieLogin.jsp");
 		}
 		
 	}

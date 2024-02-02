@@ -21,9 +21,12 @@ public class CookieCount extends HttpServlet {
 		
 		int cnt=0;
 		Cookie[] cookieArr = request.getCookies();
-		for(Cookie cookie : cookieArr) {
-			if(("count").equals(cookie.getName())) {
-				cnt =Integer.parseInt(cookie.getValue());
+		if(cookieArr!=null) {
+			for(Cookie cookie : cookieArr) {
+				if(("count").equals(cookie.getName())) {
+					cnt =Integer.parseInt(cookie.getValue());
+					break;
+				}
 			}
 		}
 		cnt++;
